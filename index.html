@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="fr">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneCopyLivre.fr - E-books créés par IA</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #e8f5e8;
+            background: #0d1b0d;
+            overflow-x: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Natural Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #050a05, #0a120a, #0f1a0f, #0d1b0d);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(76, 175, 80, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(139, 195, 74, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(102, 187, 106, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 60% 60%, rgba(165, 214, 167, 0.1) 0%, transparent 50%);
+            animation: float 25s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-15px) rotate(0.5deg); }
+            66% { transform: translateY(8px) rotate(-0.5deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Full Page Sections */
+        .full-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 0;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin: 0 0 2rem 0;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a5d6a7, #66bb6a, #4caf50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+            text-align: center;
+            width: 100%;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin: 0 0 3rem 0;
+            opacity: 0.9;
+            color: #c8e6c9;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease-out 0.3s both;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Feature Sections */
+        .feature-section {
+            text-align: center;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-content {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(13, 27, 13, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 195, 74, 0.3);
+            border-radius: 25px;
+            padding: 4rem 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.3),
+                0 5px 15px rgba(76, 175, 80, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .feature-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(139, 195, 74, 0.03));
+            border-radius: 25px;
+            z-index: -1;
+        }
+
+        .feature-content::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(165, 214, 167, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .feature-content:hover {
+            transform: translateY(-8px);
+            border-color: rgba(139, 195, 74, 0.5);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 10px 25px rgba(76, 175, 80, 0.2);
+        }
+
+        .feature-content:hover::after {
+            left: 100%;
+        }
+
+        .feature-icon {
+            font-size: 5rem;
+            margin: 0 0 2rem 0;
+            display: block;
+            animation: bounce 3s infinite;
+            text-align: center;
+            width: 100%;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-8px); }
+        }
+
+        .feature-title {
+            font-size: 3rem;
+            font-weight: 600;
+            margin: 0 0 2rem 0;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+        }
+
+        .feature-description {
+            color: #e8f5e8;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin: 0 0 1.5rem 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .feature-description:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Floating Plant Elements */
+        .floating-plant {
+            position: fixed;
+            opacity: 0.3;
+            animation: floatPlant 20s ease-in-out infinite;
+            font-size: 2.5rem;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .floating-plant:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+        .floating-plant:nth-child(2) { top: 70%; right: 12%; animation-delay: 7s; }
+        .floating-plant:nth-child(3) { bottom: 25%; left: 15%; animation-delay: 14s; }
+        .floating-plant:nth-child(4) { top: 40%; right: 20%; animation-delay: 3s; }
+        .floating-plant:nth-child(5) { bottom: 60%; left: 25%; animation-delay: 10s; }
+        .floating-plant:nth-child(6) { top: 25%; left: 5%; animation-delay: 2s; }
+        .floating-plant:nth-child(7) { top: 80%; right: 8%; animation-delay: 9s; }
+        .floating-plant:nth-child(8) { bottom: 15%; right: 25%; animation-delay: 16s; }
+        .floating-plant:nth-child(9) { top: 60%; left: 12%; animation-delay: 5s; }
+        .floating-plant:nth-child(10) { bottom: 45%; right: 15%; animation-delay: 12s; }
+        .floating-plant:nth-child(11) { top: 35%; left: 3%; animation-delay: 8s; }
+        .floating-plant:nth-child(12) { top: 85%; left: 20%; animation-delay: 18s; }
+        .floating-plant:nth-child(13) { bottom: 35%; left: 8%; animation-delay: 4s; }
+        .floating-plant:nth-child(14) { top: 50%; right: 5%; animation-delay: 11s; }
+        .floating-plant:nth-child(15) { bottom: 70%; right: 18%; animation-delay: 15s; }
+        .floating-plant:nth-child(16) { top: 20%; right: 30%; animation-delay: 6s; }
+        .floating-plant:nth-child(17) { bottom: 20%; left: 30%; animation-delay: 13s; }
+        .floating-plant:nth-child(18) { top: 75%; left: 35%; animation-delay: 1s; }
+        .floating-plant:nth-child(19) { bottom: 55%; right: 10%; animation-delay: 17s; }
+        .floating-plant:nth-child(20) { top: 45%; left: 40%; animation-delay: 19s; }
+
+        @keyframes floatPlant {
+            0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+            25% { transform: translateY(-25px) translateX(15px) rotate(2deg); }
+            50% { transform: translateY(10px) translateX(-20px) rotate(-1deg); }
+            75% { transform: translateY(-15px) translateX(8px) rotate(1deg); }
+        }
+
+        /* Call to Action Section */
+        .cta-section {
+            text-align: center;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cta-content {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .cta-icon {
+            font-size: 6rem;
+            margin: 0 0 2rem 0;
+            animation: pulse 2s infinite;
+            text-align: center;
+            width: 100%;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .cta-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 0 0 2rem 0;
+            background: linear-gradient(135deg, #a5d6a7, #66bb6a, #4caf50, #81c784);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            text-align: center;
+            width: 100%;
+        }
+
+        .cta-description {
+            font-size: 1.3rem;
+            color: #a5d6a7;
+            margin: 0 0 3rem 0;
+            line-height: 1.7;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 2rem 4rem;
+            border-radius: 60px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 20px 40px rgba(76, 175, 80, 0.4),
+                0 8px 16px rgba(0, 0, 0, 0.2),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+            margin: 0 0 2rem 0;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            animation: buttonPulse 4s ease infinite;
+            text-align: center;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 
+                0 30px 60px rgba(76, 175, 80, 0.5),
+                0 15px 30px rgba(0, 0, 0, 0.3),
+                inset 0 3px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #66bb6a, #4caf50);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:active {
+            transform: translateY(-4px) scale(1.05);
+            transition: all 0.1s ease;
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 20px 40px rgba(76, 175, 80, 0.4),
+                    0 8px 16px rgba(0, 0, 0, 0.2),
+                    inset 0 2px 0 rgba(255, 255, 255, 0.3),
+                    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+            }
+            50% { 
+                box-shadow: 
+                    0 25px 50px rgba(76, 175, 80, 0.5),
+                    0 10px 20px rgba(0, 0, 0, 0.25),
+                    inset 0 2px 0 rgba(255, 255, 255, 0.4),
+                    inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        .button-text {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .button-icon {
+            font-size: 1.5rem;
+            animation: sparkle 2s ease infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(90deg) scale(1.1); }
+            50% { transform: rotate(180deg) scale(1); }
+            75% { transform: rotate(270deg) scale(1.1); }
+        }
+
+        .cta-subtitle {
+            font-size: 1.1rem;
+            color: #81c784;
+            opacity: 0.8;
+            font-weight: 500;
+            text-align: center;
+            width: 100%;
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .feature-title {
+                font-size: 2.2rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .feature-content {
+                padding: 3rem 2rem;
+                margin: 0 10px;
+            }
+            
+            .feature-description {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .feature-icon {
+                font-size: 4rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .cta-title {
+                font-size: 2.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .cta-description {
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+            }
+            
+            .cta-button {
+                padding: 1.2rem 2.5rem;
+                font-size: 1.1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .cta-icon {
+                font-size: 4.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .full-section {
+                padding: 2rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .feature-title {
+                font-size: 1.8rem;
+            }
+            
+            .feature-content {
+                padding: 2rem 1rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Ensure perfect alignment */
+        main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1, h2, h3, h4, h5, h6, p {
+            text-align: center;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="animated-bg"></div><!-- Floating Plant Elements -->
+  <div class="floating-plant">
+   🌱
+  </div>
+  <div class="floating-plant">
+   🍃
+  </div>
+  <div class="floating-plant">
+   🌿
+  </div>
+  <div class="floating-plant">
+   🌳
+  </div>
+  <div class="floating-plant">
+   🌺
+  </div>
+  <div class="floating-plant">
+   🍀
+  </div>
+  <div class="floating-plant">
+   🌸
+  </div>
+  <div class="floating-plant">
+   🌼
+  </div>
+  <div class="floating-plant">
+   🌻
+  </div>
+  <div class="floating-plant">
+   🌷
+  </div>
+  <div class="floating-plant">
+   🌹
+  </div>
+  <div class="floating-plant">
+   🌾
+  </div>
+  <div class="floating-plant">
+   🍎
+  </div>
+  <div class="floating-plant">
+   🍊
+  </div>
+  <div class="floating-plant">
+   🍋
+  </div>
+  <div class="floating-plant">
+   🥝
+  </div>
+  <div class="floating-plant">
+   🍇
+  </div>
+  <div class="floating-plant">
+   🍓
+  </div>
+  <div class="floating-plant">
+   🥕
+  </div>
+  <div class="floating-plant">
+   🌶️
+  </div>
+  <main><!-- Hero Section -->
+   <section class="hero full-section">
+    <div class="container">
+     <div class="hero-content">
+      <h1 id="hero-title">E-books créés par Intelligence Artificielle</h1>
+      <p id="hero-subtitle">Plongez dans l'univers révolutionnaire de la littérature générée par IA. Nos livres numériques repoussent les frontières de la créativité et vous offrent des expériences de lecture totalement inédites, comme des graines qui germent en histoires extraordinaires.</p>
+     </div>
+    </div>
+   </section><!-- 100% IA Generated -->
+   <section class="feature-section full-section">
+    <div class="container">
+     <div class="feature-content fade-in"><span class="feature-icon">🌱</span>
+      <h2 class="feature-title">100% Généré par IA</h2>
+      <p class="feature-description">Nos livres naissent entièrement de l'intelligence artificielle la plus avancée. Comme une graine qui pousse naturellement, chaque histoire se développe organiquement grâce à des algorithmes sophistiqués qui analysent des milliers d'œuvres littéraires.</p>
+      <p class="feature-description">Cette approche révolutionnaire permet de créer des récits uniques, des personnages complexes et des univers fascinants que vous ne trouverez nulle part ailleurs. Chaque livre est une création originale, fruit d'une technologie de pointe.</p>
+      <p class="feature-description">L'IA explore des territoires narratifs inexplorés, mélange les genres avec audace et propose des perspectives nouvelles sur des thèmes universels, créant ainsi une bibliothèque littéraire d'un genre totalement nouveau.</p>
+     </div>
+    </div>
+   </section><!-- Instant Access -->
+   <section class="feature-section full-section">
+    <div class="container">
+     <div class="feature-content fade-in"><span class="feature-icon">🍃</span>
+      <h2 class="feature-title">Accès Instantané</h2>
+      <p class="feature-description">Comme une feuille qui s'épanouit au soleil, vos livres sont disponibles immédiatement après l'achat. Plus d'attente, plus de délais de livraison - votre bibliothèque numérique s'enrichit instantanément.</p>
+      <p class="feature-description">Téléchargez vos e-books en quelques secondes sur tous vos appareils : smartphone, tablette, liseuse ou ordinateur. Notre système de distribution ultra-rapide garantit une disponibilité 24h/24 et 7j/7.</p>
+      <p class="feature-description">Synchronisez votre progression de lecture entre tous vos appareils et reprenez votre lecture exactement où vous l'aviez laissée, que vous soyez chez vous, en voyage ou dans les transports.</p>
+     </div>
+    </div>
+   </section><!-- Affordable Prices -->
+   <section class="feature-section full-section">
+    <div class="container">
+     <div class="feature-content fade-in"><span class="feature-icon">🌿</span>
+      <h2 class="feature-title">Prix Abordables</h2>
+      <p class="feature-description">Comme la nature qui offre généreusement ses fruits, nous rendons la littérature IA accessible à tous. Nos prix démocratiques permettent à chaque lecteur de découvrir cette nouvelle forme d'art littéraire.</p>
+      <p class="feature-description">Grâce à notre processus de création automatisé, nous pouvons proposer des tarifs exceptionnellement compétitifs sans compromettre la qualité. Chaque livre coûte une fraction du prix d'un ouvrage traditionnel.</p>
+      <p class="feature-description">Profitez d'offres spéciales régulières, de packs thématiques avantageux et d'un programme de fidélité qui récompense votre passion pour la lecture. La littérature du futur n'a jamais été aussi accessible.</p>
+     </div>
+    </div>
+   </section><!-- Free Updates -->
+   <section class="feature-section full-section">
+    <div class="container">
+     <div class="feature-content fade-in"><span class="feature-icon">🌳</span>
+      <h2 class="feature-title">Mises à jour Gratuites</h2>
+      <p class="feature-description">Tel un arbre qui grandit et se renforce avec le temps, vos livres évoluent continuellement. Bénéficiez automatiquement de toutes les améliorations, corrections et nouvelles versions sans frais supplémentaires.</p>
+      <p class="feature-description">Notre IA continue d'apprendre et d'améliorer ses créations. Lorsqu'une version optimisée de votre livre est disponible - avec une meilleure structure narrative, des dialogues enrichis ou des descriptions plus vivantes - vous la recevez gratuitement.</p>
+      <p class="feature-description">Ces mises à jour peuvent inclure des chapitres bonus, des fins alternatives, des perspectives de personnages supplémentaires ou des améliorations stylistiques, enrichissant constamment votre expérience de lecture.</p>
+     </div>
+    </div>
+   </section><!-- Premium Quality -->
+   <section class="feature-section full-section">
+    <div class="container">
+     <div class="feature-content fade-in"><span class="feature-icon">🌺</span>
+      <h2 class="feature-title">Qualité Premium</h2>
+      <p class="feature-description">Comme une fleur qui s'épanouit dans les meilleures conditions, chaque livre bénéficie d'un processus de raffinement minutieux. Nos algorithmes de post-traitement garantissent une qualité littéraire exceptionnelle.</p>
+      <p class="feature-description">Chaque ouvrage passe par plusieurs phases d'optimisation : correction automatique, amélioration stylistique, vérification de cohérence narrative et formatage professionnel pour une expérience de lecture parfaite.</p>
+      <p class="feature-description">Nos livres sont disponibles dans tous les formats populaires (EPUB, PDF, MOBI) avec une mise en page soignée, une typographie élégante et une navigation intuitive. La qualité premium accessible à tous.</p>
+     </div>
+    </div>
+   </section><!-- Call to Action -->
+   <section class="cta-section full-section">
+    <div class="container">
+     <div class="cta-content fade-in">
+      <div class="cta-icon">
+       🚀
+      </div>
+      <h2 class="cta-title">Prêt à découvrir l'avenir de la lecture ?</h2>
+      <p class="cta-description">Rejoignez des milliers de lecteurs qui ont déjà adopté cette révolution littéraire. Explorez notre collection complète et laissez-vous surprendre par la créativité de l'intelligence artificielle.</p><a href="https://payhip.com/OneCopyLivre" target="_blank" rel="noopener noreferrer" class="cta-button"> <span class="button-text">Découvrir nos E-books</span> <span class="button-icon">✨</span> </a>
+      <p class="cta-subtitle">Accès immédiat • Prix abordables • Mises à jour gratuites</p>
+     </div>
+    </div>
+   </section>
+  </main>
+  <script>
+        // Configuration par défaut
+        const defaultConfig = {
+            hero_title: "E-books créés par Intelligence Artificielle",
+            hero_subtitle: "Plongez dans l'univers révolutionnaire de la littérature générée par IA. Nos livres numériques repoussent les frontières de la créativité et vous offrent des expériences de lecture totalement inédites, comme des graines qui germent en histoires extraordinaires."
+        };
+
+        // Animations au scroll
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les éléments avec la classe fade-in
+        document.addEventListener('DOMContentLoaded', () => {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(el => observer.observe(el));
+        });
+
+        // Fonction de mise à jour de la configuration
+        async function onConfigChange(config) {
+            // Mise à jour du hero
+            document.getElementById('hero-title').textContent = config.hero_title || defaultConfig.hero_title;
+            document.getElementById('hero-subtitle').textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+        }
+
+        // Initialisation du SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig: defaultConfig,
+                onConfigChange: onConfigChange,
+                mapToCapabilities: (config) => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["hero_title", config.hero_title || defaultConfig.hero_title],
+                    ["hero_subtitle", config.hero_subtitle || defaultConfig.hero_subtitle]
+                ])
+            });
+        }
+
+        // Effet de parallaxe sur les plantes flottantes
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const plants = document.querySelectorAll('.floating-plant');
+            
+            plants.forEach((plant, index) => {
+                const speed = 0.3 + (index * 0.1);
+                const yPos = -(scrolled * speed);
+                plant.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // Navigation fluide entre sections
+        let isScrolling = false;
+        
+        window.addEventListener('wheel', (e) => {
+            if (isScrolling) return;
+            
+            const sections = document.querySelectorAll('.full-section');
+            const currentSection = Math.round(window.scrollY / window.innerHeight);
+            
+            if (e.deltaY > 0 && currentSection < sections.length - 1) {
+                // Scroll vers le bas
+                isScrolling = true;
+                sections[currentSection + 1].scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => isScrolling = false, 1000);
+            } else if (e.deltaY < 0 && currentSection > 0) {
+                // Scroll vers le haut
+                isScrolling = true;
+                sections[currentSection - 1].scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => isScrolling = false, 1000);
+            }
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99754a32634b998a',t:'MTc2MTkzNjEyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
